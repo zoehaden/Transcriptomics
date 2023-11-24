@@ -1,0 +1,20 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+ 
+#SBATCH --time=012:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=1           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=20G                    # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name cufflinks     # you can give your job a name for easier identification (same as -J)
+ 
+ 
+########## Command Lines to Run ##########
+ 
+cd /mnt/home/hadenzoe/CMSE890Sec305/Session4 ### change to the directory where your data is located
+ 
+module load GCC/5.4.0-2.26  OpenMPI/1.10.3
+module load Cufflinks/2.2.1
+
+cufflinks -G Homo_sapiens.GRCh38.103.gtf -o cufflinks_SRR2012209 SRR2012209_Aligned.out.sort.bam
+ 
+scontrol show job $SLURM_JOB_ID     ### write job information to output file

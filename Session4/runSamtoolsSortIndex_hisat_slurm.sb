@@ -1,0 +1,24 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+ 
+#SBATCH --time=08:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=1           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=20G                    # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name samtools-hisat     # you can give your job a name for easier identification (same as -J)
+ 
+ 
+########## Command Lines to Run ##########
+ 
+module load GCC/9.3.0 GCCcore/9.3.0
+module load SAMtools/1.11
+ 
+cd /mnt/home/hadenzoe/CMSE890Sec305/Session4 ### change to the directory where your data is located
+
+base='2012209'
+ 
+samtools view -Sb 'SRR'$base'_hisat2_aln.sam' > 'SRR'$base'_hisat2_aln.bam'
+samtools sort 'SRR'$base'_hisat2_aln.bam' -o 'SRR'$base'_hisat2_aln_sort.bam'
+samtools index 'SRR'$base'_hisat2_aln_sort.bam'
+ 
+scontrol show job $SLURM_JOB_ID     ### write job information to output file

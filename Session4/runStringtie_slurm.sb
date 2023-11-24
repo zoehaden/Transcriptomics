@@ -1,0 +1,24 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+ 
+#SBATCH --time=04:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=8           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=20G                    # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name stringtie     # you can give your job a name for easier identification (same as -J)
+ 
+ 
+########## Command Lines to Run ##########
+ 
+module load GCC/8.3.0
+module load StringTie/2.1.3
+ 
+cd /mnt/home/hadenzoe/CMSESec305/Session4 ### change to the directory where your data is located
+
+base='2012209'
+ 
+mkdir 'stringtie_SRR'$base
+
+stringtie -G Homo_sapiens.GRCh38.103.gtf 'SRR'$base'_hisat2_aln_sort.bam' -p 8 -o '/mnt/home/ablackpz/CMSE890_305/hisat/stringtie_SRR'$base'/SRR'$base'_stringtie.gtf' -A '/mnt/home/ablackpz/CMSE890_305/hisat/stringtie_SRR'$base'/SRR'$base'_stringtie_abundances.tab' -C '/mnt/home/ablackpz/CMSE890_305/hisat/stringtie_SRR'$base'/SRR'$base'_stringtie_cov_refs.gtf' -B 
+ 
+scontrol show job $SLURM_JOB_ID     ### write job information to output file

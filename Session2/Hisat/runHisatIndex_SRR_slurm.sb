@@ -1,0 +1,19 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+ 
+#SBATCH --time=24:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=1           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=40G                    # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name hisat-index      # you can give your job a name for easier identification (same as -J)
+ 
+ 
+########## Command Lines to Run ##########
+ 
+module load hisat2/2.1.0
+
+cd /mnt/home/hadenzoe/CMSE890Sec305/Session2 ### change to the directory where your data is located
+ 
+hisat2-build Homo_sapiens.GRCh38.dna.primary_assembly.fa GRCH38.dna.primary_assembly
+ 
+scontrol show job $SLURM_JOB_ID     ### write job information to output file

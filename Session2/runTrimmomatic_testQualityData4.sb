@@ -1,0 +1,19 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+ 
+#SBATCH --time=04:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=1           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=2G                    # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name trim_test      # you can give your job a name for easier identification (same as -J)
+ 
+ 
+########## Command Lines to Run ##########
+ 
+module load Trimmomatic/0.39-Java-11
+ 
+cd /mnt/home/hadenzoe/CMSE890Sec305/Session2 ### change to the directory where your data is located
+ 
+java -jar /opt/software/Trimmomatic/0.39-Java-11/trimmomatic-0.39.jar SE -threads 1 -trimlog testQualityData4.log testQualityData4.fastq.gz testQualityData4_trimmomaticSE.fastq.gz ILLUMINACLIP:TruSeq2-SE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+ 
+scontrol show job $SLURM_JOB_ID     ### write job information to output file

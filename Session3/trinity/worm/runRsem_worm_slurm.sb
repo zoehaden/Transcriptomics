@@ -1,0 +1,20 @@
+#!/bin/bash --login
+########### Define Resources Needed with SBATCH Lines ##########
+ 
+#SBATCH --time=12:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=12           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=5G                    # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name rsem-worm      # you can give your job a name for easier identification (same as -J)
+ 
+ 
+########## Command Lines to Run ##########
+ 
+module load icc/2017.4.196-GCC-6.4.0-2.28 impi/2017.3.196 Trinity/2.6.6
+export PATH=/opt/software/RSEM/1.3.1-GCCcore-6.4.0/usr/local/bin:$PATH
+
+cd /mnt/home/hadenzoe/CMSE890Sec305/Session3/trinity/worm ### change to the directory where your data is located
+
+/opt/software/Trinity/2.6.6/util/align_and_estimate_abundance.pl --seqType fq --transcripts Trinity.fasta --est_method RSEM --left ../DataSet02_Celegans_Paired100Id200Pexp100Cov10E1N0TranscriptomicControl_1.fq --right ../DataSet02_Celegans_Paired100Id200Pexp100Cov10E1N0TranscriptomicControl_2.fq --SS_lib_type RF --aln_method bowtie --trinity_mode --prep_reference --thread_count 12 --output_dir RSEM_out
+ 
+scontrol show job $SLURM_JOB_ID     ### write job information to output file

@@ -1,0 +1,21 @@
+#!/bin/bash --login
+########## Define Resources Needed with SBATCH Lines ##########
+ 
+#SBATCH --time=24:00:00             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --ntasks=1                  # number of tasks - how many tasks (nodes) that you require (same as -n)
+#SBATCH --cpus-per-task=12           # number of CPUs (or cores) per task (same as -c)
+#SBATCH --mem=40G                    # memory required per node - amount of memory (in bytes)
+#SBATCH --job-name star-index      # you can give your job a name for easier identification (same as -J)
+ 
+ 
+########## Command Lines to Run ##########
+
+
+module load GCC/7.3.0-2.30  OpenMPI/3.1.1 
+module load STAR/2.7.3a
+
+cd /mnt/home/hadenzoe/CMSE890Sec305/Session2 ### change to the directory where your data is located
+ 
+STAR --runThreadN 12 --runMode genomeGenerate --genomeDir /mnt/home/hadenzoe/CMSE890Sec305/Session2 --genomeFastaFiles Homo_sapiens.GRCh38.dna.primary_assembly.fa --sjdbGTFfile Homo_sapiens.GRCh38.103.gtf --sjdbOverhang 75
+ 
+scontrol show job $SLURM_JOB_ID     ### write job information to output file
